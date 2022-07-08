@@ -1,5 +1,5 @@
 {
-	"name": "pocketmine/binaryutils",
+	"name": "venitynetwork/binaryutils",
 	"description": "Classes and methods for conveniently handling binary data",
 	"type": "library",
 	"license": "LGPL-3.0",
