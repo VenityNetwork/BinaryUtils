@@ -161,7 +161,7 @@ class BinaryStream{
 	}
 
 	function putLShort($v){
-		$this->buffer .= \writeUnsignedShortLE($v);
+		$this->buffer .= \writeShortLE($v);
 	}
 
 	/**
