@@ -129,7 +129,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getShort(){
-		return \readShortBE($this->get(2));
+		return \readUnsignedShortBE($this->get(2));
 	}
 
 	/**
