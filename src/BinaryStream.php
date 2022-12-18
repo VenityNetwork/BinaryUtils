@@ -129,7 +129,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getShort(){
-		return \readUnsignedShortBE($this->get(2));
+		try{
+			return \readUnsignedShortBE($this->get(2));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -137,11 +141,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getSignedShort(){
-		return \readSignedShortBE($this->get(2));
+		try{
+			return \readSignedShortBE($this->get(2));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putShort($v){
-		$this->buffer .= \writeShortBE($v);
+		try{
+			$this->buffer .= \writeShortBE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -149,7 +161,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getLShort(){
-		return \readUnsignedShortLE($this->get(2));
+		try{
+			return \readUnsignedShortLE($this->get(2));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -157,11 +173,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getSignedLShort(){
-		return \readSignedShortLE($this->get(2));
+		try{
+			return \readSignedShortLE($this->get(2));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putLShort($v){
-		$this->buffer .= \writeShortLE($v);
+		try{
+			$this->buffer .= \writeShortLE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -193,11 +217,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getInt(){
-		return \readSignedIntBE($this->get(4));
+		try{
+			return \readSignedIntBE($this->get(4));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putInt($v){
-		$this->buffer .= \writeIntBE($v);
+		try{
+			$this->buffer .= \writeIntBE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -205,11 +237,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getLInt(){
-		return \readSignedIntLE($this->get(4));
+		try{
+			return \readSignedIntLE($this->get(4));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putLInt($v){
-		$this->buffer .= \writeIntLE($v);
+		try{
+			$this->buffer .= \writeIntLE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -217,7 +257,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getFloat(){
-		return \readFloatBE($this->get(4));
+		try{
+			return \readFloatBE($this->get(4));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -225,11 +269,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getRoundedFloat($accuracy){
-		return round(readFloatBE($this->get(4)), $accuracy);
+		try{
+			return round(readFloatBE($this->get(4)), $accuracy);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putFloat($v){
-		$this->buffer .= \writeFloatBE($v);
+		try{
+			$this->buffer .= \writeFloatBE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -237,7 +289,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getLFloat(){
-		return \readFloatLE($this->get(4));
+		try{
+			return \readFloatLE($this->get(4));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -245,11 +301,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getRoundedLFloat($accuracy){
-		return round(readFloatLE($this->get(4)), $accuracy);
+		try{
+			return round(readFloatLE($this->get(4)), $accuracy);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putLFloat($v){
-		$this->buffer .= \writeFloatLE($v);
+		try{
+			$this->buffer .= \writeFloatLE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -257,11 +321,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getDouble(){
-		return \readDoubleBE($this->get(8));
+		try{
+			return \readDoubleBE($this->get(8));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putDouble($v){
-		$this->buffer .= \writeDoubleBE($v);
+		try{
+			$this->buffer .= \writeDoubleBE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -269,11 +341,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getLDouble(){
-		return \readDoubleLE($this->get(8));
+		try{
+			return \readDoubleLE($this->get(8));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putLDouble($v){
-		$this->buffer .= \writeDoubleLE($v);
+		try{
+			$this->buffer .= \writeDoubleLE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -281,11 +361,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getLong(){
-		return \readSignedLongBE($this->get(8));
+		try{
+			return \readSignedLongBE($this->get(8));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putLong($v){
-		$this->buffer .= \writeLongBE($v);
+		try{
+			$this->buffer .= \writeLongBE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -293,11 +381,19 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getLLong(){
-		return \readSignedLongLE($this->get(8));
+		try{
+			return \readSignedLongLE($this->get(8));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	function putLLong($v){
-		$this->buffer .= \writeLongLE($v);
+		try{
+			$this->buffer .= \writeLongLE($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -307,14 +403,22 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getUnsignedVarInt(){
-		return \readUnsignedVarInt($this->buffer, $this->offset);
+		try{
+			return \readUnsignedVarInt($this->buffer, $this->offset);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
 	 * Writes a 32-bit variable-length unsigned integer to the end of the buffer.
 	 */
 	function putUnsignedVarInt($v){
-		$this->put(\writeUnsignedVarInt($v));
+		try{
+			$this->put(\writeUnsignedVarInt($v));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -324,14 +428,22 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getVarInt(){
-		return \readSignedVarInt($this->buffer, $this->offset);
+		try{
+			return \readSignedVarInt($this->buffer, $this->offset);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
 	 * Writes a 32-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
 	function putVarInt($v){
-		$this->put(\writeSignedVarInt($v));
+		try{
+			$this->put(\writeSignedVarInt($v));
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -341,14 +453,22 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getUnsignedVarLong(){
-		return \readUnsignedVarLong($this->buffer, $this->offset);
+		try{
+			return \readUnsignedVarLong($this->buffer, $this->offset);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
 	 * Writes a 64-bit variable-length integer to the end of the buffer.
 	 */
 	function putUnsignedVarLong($v){
-		$this->buffer .= \writeUnsignedVarLong($v);
+		try{
+			$this->buffer .= \writeUnsignedVarLong($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
@@ -358,14 +478,22 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	function getVarLong(){
-		return \readSignedVarLong($this->buffer, $this->offset);
+		try{
+			return \readSignedVarLong($this->buffer, $this->offset);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
 	 * Writes a 64-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
 	function putVarLong($v){
-		$this->buffer .= \writeSignedVarLong($v);
+		try{
+			$this->buffer .= \writeSignedVarLong($v);
+		}catch(\Throwable $t) {
+			throw new BinaryDataException($t->getMessage());
+		}
 	}
 
 	/**
