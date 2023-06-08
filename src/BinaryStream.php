@@ -9,7 +9,7 @@
  * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -34,11 +34,11 @@ class BinaryStream{
 	//TODO: use typed properties when https://bugs.php.net/bug.php?id=81090 is fixed
 
 	/** @var int */
-	var $offset;
+	protected $offset;
 	/** @var string */
-	var $buffer;
+	protected $buffer;
 
-	function __construct($buffer = "", $offset = 0){
+	public function __construct(string $buffer = "", int $offset = 0){
 		$this->buffer = $buffer;
 		$this->offset = $offset;
 	}
@@ -46,27 +46,29 @@ class BinaryStream{
 	/**
 	 * Rewinds the stream pointer to the start.
 	 */
-	function rewind(){
+	public function rewind() : void{
 		$this->offset = 0;
 	}
 
-	function setOffset($offset){
+	public function setOffset(int $offset) : void{
 		$this->offset = $offset;
 	}
 
-	function getOffset(){
+	public function getOffset() : int{
 		return $this->offset;
 	}
 
-	function getBuffer(){
+	public function getBuffer() : string{
 		return $this->buffer;
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException if there are not enough bytes left in the buffer
+	 *
+	 * @phpstan-param int<0, max> $len
 	 */
-	function get(int $len){
+	public function get(int $len) : string{
 		if($len === 0){
 			return "";
 		}
@@ -86,7 +88,7 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getRemaining(){
+	public function getRemaining() : string{
 		$buflen = strlen($this->buffer);
 		if($this->offset >= $buflen){
 			throw new BinaryDataException("No bytes left to read");
@@ -96,7 +98,7 @@ class BinaryStream{
 		return $str;
 	}
 
-	function put($str){
+	public function put(string $str) : void{
 		$this->buffer .= $str;
 	}
 
@@ -104,11 +106,11 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getBool(){
+	public function getBool() : bool{
 		return $this->get(1) !== "\x00";
 	}
 
-	function putBool($v){
+	public function putBool(bool $v) : void{
 		$this->buffer .= ($v ? "\x01" : "\x00");
 	}
 
@@ -116,11 +118,11 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getByte(){
+	public function getByte() : int{
 		return ord($this->get(1));
 	}
 
-	function putByte($v){
+	public function putByte(int $v) : void{
 		$this->buffer .= chr($v);
 	}
 
@@ -128,75 +130,51 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getShort(){
-		try{
-			return \readUnsignedShortBE($this->get(2));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getShort() : int{
+		return Binary::readShort($this->get(2));
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getSignedShort(){
-		try{
-			return \readSignedShortBE($this->get(2));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getSignedShort() : int{
+		return Binary::readSignedShort($this->get(2));
 	}
 
-	function putShort($v){
-		try{
-			$this->buffer .= \writeShortBE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putShort(int $v) : void{
+		$this->buffer .= Binary::writeShort($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLShort(){
-		try{
-			return \readUnsignedShortLE($this->get(2));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getLShort() : int{
+		return Binary::readLShort($this->get(2));
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getSignedLShort(){
-		try{
-			return \readSignedShortLE($this->get(2));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getSignedLShort() : int{
+		return Binary::readSignedLShort($this->get(2));
 	}
 
-	function putLShort($v){
-		try{
-			$this->buffer .= \writeShortLE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putLShort(int $v) : void{
+		$this->buffer .= Binary::writeLShort($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getTriad(){
+	public function getTriad() : int{
 		return Binary::readTriad($this->get(3));
 	}
 
-	function putTriad($v){
+	public function putTriad(int $v) : void{
 		$this->buffer .= Binary::writeTriad($v);
 	}
 
@@ -204,11 +182,11 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLTriad(){
+	public function getLTriad() : int{
 		return Binary::readLTriad($this->get(3));
 	}
 
-	function putLTriad($v){
+	public function putLTriad(int $v) : void{
 		$this->buffer .= Binary::writeLTriad($v);
 	}
 
@@ -216,184 +194,112 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getInt(){
-		try{
-			return \readSignedIntBE($this->get(4));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getInt() : int{
+		return Binary::readInt($this->get(4));
 	}
 
-	function putInt($v){
-		try{
-			$this->buffer .= \writeIntBE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putInt(int $v) : void{
+		$this->buffer .= Binary::writeInt($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLInt(){
-		try{
-			return \readSignedIntLE($this->get(4));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getLInt() : int{
+		return Binary::readLInt($this->get(4));
 	}
 
-	function putLInt($v){
-		try{
-			$this->buffer .= \writeIntLE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putLInt(int $v) : void{
+		$this->buffer .= Binary::writeLInt($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getFloat(){
-		try{
-			return \readFloatBE($this->get(4));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getFloat() : float{
+		return Binary::readFloat($this->get(4));
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getRoundedFloat($accuracy){
-		try{
-			return round(readFloatBE($this->get(4)), $accuracy);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getRoundedFloat(int $accuracy) : float{
+		return Binary::readRoundedFloat($this->get(4), $accuracy);
 	}
 
-	function putFloat($v){
-		try{
-			$this->buffer .= \writeFloatBE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putFloat(float $v) : void{
+		$this->buffer .= Binary::writeFloat($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLFloat(){
-		try{
-			return \readFloatLE($this->get(4));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getLFloat() : float{
+		return Binary::readLFloat($this->get(4));
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getRoundedLFloat($accuracy){
-		try{
-			return round(readFloatLE($this->get(4)), $accuracy);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getRoundedLFloat(int $accuracy) : float{
+		return Binary::readRoundedLFloat($this->get(4), $accuracy);
 	}
 
-	function putLFloat($v){
-		try{
-			$this->buffer .= \writeFloatLE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putLFloat(float $v) : void{
+		$this->buffer .= Binary::writeLFloat($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getDouble(){
-		try{
-			return \readDoubleBE($this->get(8));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getDouble() : float{
+		return Binary::readDouble($this->get(8));
 	}
 
-	function putDouble($v){
-		try{
-			$this->buffer .= \writeDoubleBE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putDouble(float $v) : void{
+		$this->buffer .= Binary::writeDouble($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLDouble(){
-		try{
-			return \readDoubleLE($this->get(8));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getLDouble() : float{
+		return Binary::readLDouble($this->get(8));
 	}
 
-	function putLDouble($v){
-		try{
-			$this->buffer .= \writeDoubleLE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putLDouble(float $v) : void{
+		$this->buffer .= Binary::writeLDouble($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLong(){
-		try{
-			return \readSignedLongBE($this->get(8));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getLong() : int{
+		return Binary::readLong($this->get(8));
 	}
 
-	function putLong($v){
-		try{
-			$this->buffer .= \writeLongBE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putLong(int $v) : void{
+		$this->buffer .= Binary::writeLong($v);
 	}
 
 	/**
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getLLong(){
-		try{
-			return \readSignedLongLE($this->get(8));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getLLong() : int{
+		return Binary::readLLong($this->get(8));
 	}
 
-	function putLLong($v){
-		try{
-			$this->buffer .= \writeLongLE($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putLLong(int $v) : void{
+		$this->buffer .= Binary::writeLLong($v);
 	}
 
 	/**
@@ -402,23 +308,15 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getUnsignedVarInt(){
-		try{
-			return \readUnsignedVarInt($this->buffer, $this->offset);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getUnsignedVarInt() : int{
+		return Binary::readUnsignedVarInt($this->buffer, $this->offset);
 	}
 
 	/**
 	 * Writes a 32-bit variable-length unsigned integer to the end of the buffer.
 	 */
-	function putUnsignedVarInt($v){
-		try{
-			$this->put(\writeUnsignedVarInt($v));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putUnsignedVarInt(int $v) : void{
+		$this->put(Binary::writeUnsignedVarInt($v));
 	}
 
 	/**
@@ -427,23 +325,15 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getVarInt(){
-		try{
-			return \readSignedVarInt($this->buffer, $this->offset);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getVarInt() : int{
+		return Binary::readVarInt($this->buffer, $this->offset);
 	}
 
 	/**
 	 * Writes a 32-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
-	function putVarInt($v){
-		try{
-			$this->put(\writeSignedVarInt($v));
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putVarInt(int $v) : void{
+		$this->put(Binary::writeVarInt($v));
 	}
 
 	/**
@@ -452,23 +342,15 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getUnsignedVarLong(){
-		try{
-			return \readUnsignedVarLong($this->buffer, $this->offset);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getUnsignedVarLong() : int{
+		return Binary::readUnsignedVarLong($this->buffer, $this->offset);
 	}
 
 	/**
 	 * Writes a 64-bit variable-length integer to the end of the buffer.
 	 */
-	function putUnsignedVarLong($v){
-		try{
-			$this->buffer .= \writeUnsignedVarLong($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putUnsignedVarLong(int $v) : void{
+		$this->buffer .= Binary::writeUnsignedVarLong($v);
 	}
 
 	/**
@@ -477,29 +359,21 @@ class BinaryStream{
 	 * @phpstan-impure
 	 * @throws BinaryDataException
 	 */
-	function getVarLong(){
-		try{
-			return \readSignedVarLong($this->buffer, $this->offset);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function getVarLong() : int{
+		return Binary::readVarLong($this->buffer, $this->offset);
 	}
 
 	/**
 	 * Writes a 64-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
-	function putVarLong($v){
-		try{
-			$this->buffer .= \writeSignedVarLong($v);
-		}catch(\Throwable $t) {
-			throw new BinaryDataException($t->getMessage());
-		}
+	public function putVarLong(int $v) : void{
+		$this->buffer .= Binary::writeVarLong($v);
 	}
 
 	/**
 	 * Returns whether the offset has reached the end of the buffer.
 	 */
-	function feof(){
+	public function feof() : bool{
 		return !isset($this->buffer[$this->offset]);
 	}
 }
