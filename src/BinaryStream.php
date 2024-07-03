@@ -23,8 +23,15 @@ declare(strict_types=1);
 
 namespace pocketmine\utils;
 
+use function bedrockbuf_readFloat;
+use function bedrockbuf_readLTriad;
+use function bedrockbuf_readUnsignedShort;
+use function bedrockbuf_readVarLong;
+use function bedrockbuf_writeLShort;
+use function bedrockbuf_writeLTriad;
 use function chr;
 use function ord;
+use function round;
 use function strlen;
 use function substr;
 
@@ -127,7 +134,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getShort() : int{
-		return Binary::readShort($this->get(2));
+		return bedrockbuf_readUnsignedShort($this->get(2)) ?? throw new BinaryDataException("Failed to read short");
 	}
 
 	/**
@@ -135,11 +142,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getSignedShort() : int{
-		return Binary::readSignedShort($this->get(2));
+		return bedrockbuf_readShort($this->get(2)) ?? throw new BinaryDataException("Failed to read signed short");
 	}
 
 	public function putShort(int $v) : void{
-		$this->buffer .= Binary::writeShort($v);
+		$this->buffer .= bedrockbuf_writeShort($v);
 	}
 
 	/**
@@ -147,7 +154,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLShort() : int{
-		return Binary::readLShort($this->get(2));
+		return bedrockbuf_readLShort($this->get(2)) ?? throw new BinaryDataException("Failed to read LShort");
 	}
 
 	/**
@@ -155,11 +162,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getSignedLShort() : int{
-		return Binary::readSignedLShort($this->get(2));
+		return bedrockbuf_readLShort($this->get(2)) ?? throw new BinaryDataException("Failed to read signed LShort");
 	}
 
 	public function putLShort(int $v) : void{
-		$this->buffer .= Binary::writeLShort($v);
+		$this->buffer .= bedrockbuf_writeLShort($v);
 	}
 
 	/**
@@ -167,11 +174,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getTriad() : int{
-		return Binary::readTriad($this->get(3));
+		return bedrockbuf_readLTriad($this->get(3)) ?? throw new BinaryDataException("Failed to read triad");
 	}
 
 	public function putTriad(int $v) : void{
-		$this->buffer .= Binary::writeTriad($v);
+		$this->buffer .= bedrockbuf_writeLTriad($v);
 	}
 
 	/**
@@ -179,11 +186,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLTriad() : int{
-		return Binary::readLTriad($this->get(3));
+		return bedrockbuf_readLTriad($this->get(3)) ?? throw new BinaryDataException("Failed to read LTriad");
 	}
 
 	public function putLTriad(int $v) : void{
-		$this->buffer .= Binary::writeLTriad($v);
+		$this->buffer .= bedrockbuf_writeLTriad($v);
 	}
 
 	/**
@@ -191,11 +198,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getInt() : int{
-		return Binary::readInt($this->get(4));
+		return bedrockbuf_readInt($this->get(4)) ?? throw new BinaryDataException("Failed to read int");
 	}
 
 	public function putInt(int $v) : void{
-		$this->buffer .= Binary::writeInt($v);
+		$this->buffer .= bedrockbuf_writeInt($v);
 	}
 
 	/**
@@ -203,11 +210,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLInt() : int{
-		return Binary::readLInt($this->get(4));
+		return bedrockbuf_readLInt($this->get(4)) ?? throw new BinaryDataException("Failed to read LInt");
 	}
 
 	public function putLInt(int $v) : void{
-		$this->buffer .= Binary::writeLInt($v);
+		$this->buffer .= bedrockbuf_writeLInt($v);
 	}
 
 	/**
@@ -223,11 +230,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getRoundedFloat(int $accuracy) : float{
-		return Binary::readRoundedFloat($this->get(4), $accuracy);
+		return round(bedrockbuf_readFloat($this->get(4)) ?? throw new BinaryDataException("Failed to read float"), $accuracy);
 	}
 
 	public function putFloat(float $v) : void{
-		$this->buffer .= Binary::writeFloat($v);
+		$this->buffer .= bedrockbuf_writeFloat($v);
 	}
 
 	/**
@@ -235,7 +242,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLFloat() : float{
-		return Binary::readLFloat($this->get(4));
+		return bedrockbuf_readLFloat($this->get(4)) ?? throw new BinaryDataException("Failed to read LFloat");
 	}
 
 	/**
@@ -243,11 +250,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getRoundedLFloat(int $accuracy) : float{
-		return Binary::readRoundedLFloat($this->get(4), $accuracy);
+		return round(bedrockbuf_readLFloat($this->get(4)) ?? throw new BinaryDataException("Failed to read LFloat"), $accuracy);
 	}
 
 	public function putLFloat(float $v) : void{
-		$this->buffer .= Binary::writeLFloat($v);
+		$this->buffer .= bedrockbuf_writeLFloat($v);
 	}
 
 	/**
@@ -255,11 +262,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getDouble() : float{
-		return Binary::readDouble($this->get(8));
+		return bedrockbuf_readDouble($this->get(8)) ?? throw new BinaryDataException("Failed to read double");
 	}
 
 	public function putDouble(float $v) : void{
-		$this->buffer .= Binary::writeDouble($v);
+		$this->buffer .= bedrockbuf_writeDouble($v);
 	}
 
 	/**
@@ -267,11 +274,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLDouble() : float{
-		return Binary::readLDouble($this->get(8));
+		return bedrockbuf_readLDouble($this->get(8)) ?? throw new BinaryDataException("Failed to read LDouble");
 	}
 
 	public function putLDouble(float $v) : void{
-		$this->buffer .= Binary::writeLDouble($v);
+		$this->buffer .= bedrockbuf_writeLDouble($v);
 	}
 
 	/**
@@ -279,11 +286,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLong() : int{
-		return Binary::readLong($this->get(8));
+		return bedrockbuf_readLong($this->get(8)) ?? throw new BinaryDataException("Failed to read long");
 	}
 
 	public function putLong(int $v) : void{
-		$this->buffer .= Binary::writeLong($v);
+		$this->buffer .= bedrockbuf_writeLong($v);
 	}
 
 	/**
@@ -291,11 +298,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLLong() : int{
-		return Binary::readLLong($this->get(8));
+		return bedrockbuf_readLLong($this->get(8)) ?? throw new BinaryDataException("Failed to read LLong");
 	}
 
 	public function putLLong(int $v) : void{
-		$this->buffer .= Binary::writeLLong($v);
+		$this->buffer .= bedrockbuf_writeLLong($v);
 	}
 
 	/**
@@ -305,14 +312,14 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getUnsignedVarInt() : int{
-		return Binary::readUnsignedVarInt($this->buffer, $this->offset);
+		return bedrockbuf_readVarInt($this->buffer, $this->offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarInt");
 	}
 
 	/**
 	 * Writes a 32-bit variable-length unsigned integer to the end of the buffer.
 	 */
 	public function putUnsignedVarInt(int $v) : void{
-		$this->put(Binary::writeUnsignedVarInt($v));
+		$this->buffer .= bedrockbuf_writeVarInt($v, false);
 	}
 
 	/**
@@ -322,14 +329,14 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getVarInt() : int{
-		return Binary::readVarInt($this->buffer, $this->offset);
+		return bedrockbuf_readVarInt($this->buffer, $this->offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
 	}
 
 	/**
 	 * Writes a 32-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
 	public function putVarInt(int $v) : void{
-		$this->put(Binary::writeVarInt($v));
+		$this->buffer .= bedrockbuf_writeVarInt($v, true);
 	}
 
 	/**
@@ -339,14 +346,14 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getUnsignedVarLong() : int{
-		return Binary::readUnsignedVarLong($this->buffer, $this->offset);
+		return bedrockbuf_readVarLong($this->buffer, $this->offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarLong");
 	}
 
 	/**
 	 * Writes a 64-bit variable-length integer to the end of the buffer.
 	 */
 	public function putUnsignedVarLong(int $v) : void{
-		$this->buffer .= Binary::writeUnsignedVarLong($v);
+		$this->buffer .= bedrockbuf_writeVarLong($v, false);
 	}
 
 	/**
@@ -356,14 +363,14 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getVarLong() : int{
-		return Binary::readVarLong($this->buffer, $this->offset);
+		return bedrockbuf_readVarLong($this->buffer, $this->offset, true) ?? throw new BinaryDataException("Failed to read VarLong");
 	}
 
 	/**
 	 * Writes a 64-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
 	public function putVarLong(int $v) : void{
-		$this->buffer .= Binary::writeVarLong($v);
+		$this->buffer .= bedrockbuf_writeVarLong($v, true);
 	}
 
 	/**

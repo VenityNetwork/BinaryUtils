@@ -27,6 +27,9 @@ declare(strict_types=1);
 namespace pocketmine\utils;
 
 use InvalidArgumentException;
+use function bedrockbuf_readLLong;
+use function bedrockbuf_readUnsignedShort;
+use function bedrockbuf_writeLFloat;
 use function chr;
 use function ord;
 use function pack;
@@ -151,7 +154,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readShort(string $str) : int{
-		return self::safeUnpack("n", $str, self::SIZEOF_SHORT)[1];
+		return bedrockbuf_readUnsignedShort($str) ?? throw new BinaryDataException("Failed to read Short");
 	}
 
 	/**
@@ -160,14 +163,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readSignedShort(string $str) : int{
-		return self::signShort(self::safeUnpack("n", $str, self::SIZEOF_SHORT)[1]);
+		return bedrockbuf_readShort($str) ?? throw new BinaryDataException("Failed to read signed short");
 	}
 
 	/**
 	 * Writes a 16-bit signed/unsigned big-endian number
 	 */
 	public static function writeShort(int $value) : string{
-		return pack("n", $value);
+		return bedrockbuf_writeShort($value);
 	}
 
 	/**
@@ -176,7 +179,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readLShort(string $str) : int{
-		return self::safeUnpack("v", $str, self::SIZEOF_SHORT)[1];
+		return bedrockbuf_readUnsignedShort($str) ?? throw new BinaryDataException("Failed to read LShort");
 	}
 
 	/**
@@ -185,14 +188,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readSignedLShort(string $str) : int{
-		return self::signShort(self::safeUnpack("v", $str, self::SIZEOF_SHORT)[1]);
+		return bedrockbuf_readLShort($str);
 	}
 
 	/**
 	 * Writes a 16-bit signed/unsigned little-endian number
 	 */
 	public static function writeLShort(int $value) : string{
-		return pack("v", $value);
+		return bedrockbuf_writeShort($value);
 	}
 
 	/**
@@ -201,14 +204,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readTriad(string $str) : int{
-		return self::safeUnpack("N", "\x00" . $str, self::SIZEOF_INT)[1];
+		return bedrockbuf_readTriad($str) ?? throw new BinaryDataException("Failed to read Triad");
 	}
 
 	/**
 	 * Writes a 3-byte big-endian number
 	 */
 	public static function writeTriad(int $value) : string{
-		return substr(pack("N", $value), 1);
+		return bedrockbuf_writeTriad($value);
 	}
 
 	/**
@@ -217,14 +220,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readLTriad(string $str) : int{
-		return self::safeUnpack("V", $str . "\x00", self::SIZEOF_INT)[1];
+		return bedrockbuf_readLTriad($str) ?? throw new BinaryDataException("Failed to read LTriad");
 	}
 
 	/**
 	 * Writes a 3-byte little-endian number
 	 */
 	public static function writeLTriad(int $value) : string{
-		return substr(pack("V", $value), 0, -1);
+		return bedrockbuf_writeLTriad($value);
 	}
 
 	/**
@@ -233,14 +236,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readInt(string $str) : int{
-		return self::signInt(self::safeUnpack("N", $str, self::SIZEOF_INT)[1]);
+		return bedrockbuf_readInt($str) ?? throw new BinaryDataException("Failed to read Int");
 	}
 
 	/**
 	 * Writes a 4-byte integer
 	 */
 	public static function writeInt(int $value) : string{
-		return pack("N", $value);
+		return bedrockbuf_writeInt($value);
 	}
 
 	/**
@@ -249,14 +252,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readLInt(string $str) : int{
-		return self::signInt(self::safeUnpack("V", $str, self::SIZEOF_INT)[1]);
+		return bedrockbuf_readLInt($str) ?? throw new BinaryDataException("Failed to read LInt");
 	}
 
 	/**
 	 * Writes a 4-byte signed little-endian integer
 	 */
 	public static function writeLInt(int $value) : string{
-		return pack("V", $value);
+		return bedrockbuf_writeLInt($value);
 	}
 
 	/**
@@ -265,7 +268,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readFloat(string $str) : float{
-		return self::safeUnpack("G", $str, self::SIZEOF_FLOAT)[1];
+		return bedrockbuf_readFloat($str) ?? throw new BinaryDataException("Failed to read Float");
 	}
 
 	/**
@@ -274,7 +277,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readRoundedFloat(string $str, int $accuracy) : float{
-		return round(self::readFloat($str), $accuracy);
+		return round(bedrockbuf_readFloat($str), $accuracy);
 	}
 
 	/**
@@ -299,14 +302,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readRoundedLFloat(string $str, int $accuracy) : float{
-		return round(self::readLFloat($str), $accuracy);
+		return round(bedrockbuf_readLFloat($str), $accuracy);
 	}
 
 	/**
 	 * Writes a 4-byte little-endian floating-point number.
 	 */
 	public static function writeLFloat(float $value) : string{
-		return pack("g", $value);
+		return bedrockbuf_writeLFloat($value);
 	}
 
 	/**
@@ -322,14 +325,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readDouble(string $str) : float{
-		return self::safeUnpack("E", $str, self::SIZEOF_DOUBLE)[1];
+		return bedrockbuf_readDouble($str) ?? throw new BinaryDataException("Failed to read Double");
 	}
 
 	/**
 	 * Writes an 8-byte floating-point number.
 	 */
 	public static function writeDouble(float $value) : string{
-		return pack("E", $value);
+		return bedrockbuf_writeDouble($value);
 	}
 
 	/**
@@ -338,14 +341,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readLDouble(string $str) : float{
-		return self::safeUnpack("e", $str, self::SIZEOF_DOUBLE)[1];
+		return bedrockbuf_readLDouble($str) ?? throw new BinaryDataException("Failed to read LDouble");
 	}
 
 	/**
 	 * Writes an 8-byte floating-point little-endian number.
 	 */
 	public static function writeLDouble(float $value) : string{
-		return pack("e", $value);
+		return bedrockbuf_writeLDouble($value);
 	}
 
 	/**
@@ -354,14 +357,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readLong(string $str) : int{
-		return self::safeUnpack("J", $str, self::SIZEOF_LONG)[1];
+		return bedrockbuf_readLong($str) ?? throw new BinaryDataException("Failed to read Long");
 	}
 
 	/**
 	 * Writes an 8-byte integer.
 	 */
 	public static function writeLong(int $value) : string{
-		return pack("J", $value);
+		return bedrockbuf_writeLong($value);
 	}
 
 	/**
@@ -370,14 +373,14 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readLLong(string $str) : int{
-		return self::safeUnpack("P", $str, self::SIZEOF_LONG)[1];
+		return bedrockbuf_readLLong($str) ?? throw new BinaryDataException("Failed to read LLong");
 	}
 
 	/**
 	 * Writes an 8-byte little-endian integer.
 	 */
 	public static function writeLLong(int $value) : string{
-		return pack("P", $value);
+		return bedrockbuf_writeLLong($value);
 	}
 
 	/**
@@ -388,9 +391,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarInt(string $buffer, int &$offset) : int{
-		$raw = self::readUnsignedVarInt($buffer, $offset);
-		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 63));
+		return bedrockbuf_readVarInt($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
 	}
 
 	/**
@@ -401,28 +402,14 @@ class Binary{
 	 * @throws BinaryDataException if the var-int did not end after 5 bytes or there were not enough bytes
 	 */
 	public static function readUnsignedVarInt(string $buffer, int &$offset) : int{
-		$value = 0;
-		for($i = 0; $i <= 28; $i += 7){
-			if(!isset($buffer[$offset])){
-				throw new BinaryDataException("No bytes left in buffer");
-			}
-			$b = ord($buffer[$offset++]);
-			$value |= (($b & 0x7f) << $i);
-
-			if(($b & 0x80) === 0){
-				return $value;
-			}
-		}
-
-		throw new BinaryDataException("VarInt did not terminate after 5 bytes!");
+		return bedrockbuf_readVarInt($buffer, $offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarInt");
 	}
 
 	/**
 	 * Writes a 32-bit integer as a zigzag-encoded variable-length integer.
 	 */
 	public static function writeVarInt(int $v) : string{
-		$v = ($v << 32 >> 32);
-		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> 31));
+		return bedrockbuf_writeVarInt($v, true);
 	}
 
 	/**
@@ -431,20 +418,7 @@ class Binary{
 	 * @return string up to 5 bytes
 	 */
 	public static function writeUnsignedVarInt(int $value) : string{
-		$buf = "";
-		$remaining = $value & 0xffffffff;
-		for($i = 0; $i < 5; ++$i){
-			if(($remaining >> 7) !== 0){
-				$buf .= chr($remaining | 0x80);
-			}else{
-				$buf .= chr($remaining & 0x7f);
-				return $buf;
-			}
-
-			$remaining = (($remaining >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
-		}
-
-		throw new InvalidArgumentException("Value too large to be encoded as a VarInt");
+		return bedrockbuf_writeVarInt($value, false);
 	}
 
 	/**
@@ -455,9 +429,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarLong(string $buffer, int &$offset) : int{
-		$raw = self::readUnsignedVarLong($buffer, $offset);
-		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 63));
+		return bedrockbuf_readVarLong($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarLong");
 	}
 
 	/**
@@ -468,46 +440,20 @@ class Binary{
 	 * @throws BinaryDataException if the var-int did not end after 10 bytes or there were not enough bytes
 	 */
 	public static function readUnsignedVarLong(string $buffer, int &$offset) : int{
-		$value = 0;
-		for($i = 0; $i <= 63; $i += 7){
-			if(!isset($buffer[$offset])){
-				throw new BinaryDataException("No bytes left in buffer");
-			}
-			$b = ord($buffer[$offset++]);
-			$value |= (($b & 0x7f) << $i);
-
-			if(($b & 0x80) === 0){
-				return $value;
-			}
-		}
-
-		throw new BinaryDataException("VarLong did not terminate after 10 bytes!");
+		return bedrockbuf_readVarLong($buffer, $offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarLong");
 	}
 
 	/**
 	 * Writes a 64-bit integer as a zigzag-encoded variable-length long.
 	 */
 	public static function writeVarLong(int $v) : string{
-		return self::writeUnsignedVarLong(($v << 1) ^ ($v >> 63));
+		return bedrockbuf_writeVarLong($v, true);
 	}
 
 	/**
 	 * Writes a 64-bit unsigned integer as a variable-length long.
 	 */
 	public static function writeUnsignedVarLong(int $value) : string{
-		$buf = "";
-		$remaining = $value;
-		for($i = 0; $i < 10; ++$i){
-			if(($remaining >> 7) !== 0){
-				$buf .= chr($remaining | 0x80); //Let chr() take the last byte of this, it's faster than adding another & 0x7f.
-			}else{
-				$buf .= chr($remaining & 0x7f);
-				return $buf;
-			}
-
-			$remaining = (($remaining >> 7) & (PHP_INT_MAX >> 6)); //PHP really needs a logical right-shift operator
-		}
-
-		throw new InvalidArgumentException("Value too large to be encoded as a VarLong");
+		return bedrockbuf_writeVarLong($value, false);
 	}
 }
