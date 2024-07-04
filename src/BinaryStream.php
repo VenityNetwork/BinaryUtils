@@ -329,14 +329,14 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getVarInt() : int{
-		return bedrockbuf_readVarInt($this->buffer, $this->offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
+		return Binary::readVarInt($this->buffer, $this->offset);
 	}
 
 	/**
 	 * Writes a 32-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
 	public function putVarInt(int $v) : void{
-		$this->buffer .= bedrockbuf_writeVarInt($v, true);
+		$this->buffer .= Binary::writeVarInt($v);
 	}
 
 	/**
@@ -363,14 +363,14 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getVarLong() : int{
-		return bedrockbuf_readVarLong($this->buffer, $this->offset, true) ?? throw new BinaryDataException("Failed to read VarLong");
+		return Binary::readVarLong($this->buffer, $this->offset);
 	}
 
 	/**
 	 * Writes a 64-bit zigzag-encoded variable-length integer to the end of the buffer.
 	 */
 	public function putVarLong(int $v) : void{
-		$this->buffer .= bedrockbuf_writeVarLong($v, true);
+		$this->buffer .= Binary::writeVarLong($v);
 	}
 
 	/**
