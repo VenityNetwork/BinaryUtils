@@ -23,12 +23,6 @@ declare(strict_types=1);
 
 namespace pocketmine\utils;
 
-use function bedrockbuf_readFloat;
-use function bedrockbuf_readLTriad;
-use function bedrockbuf_readUnsignedShort;
-use function bedrockbuf_readVarLong;
-use function bedrockbuf_writeLShort;
-use function bedrockbuf_writeLTriad;
 use function chr;
 use function ord;
 use function round;
@@ -174,11 +168,11 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getTriad() : int{
-		return bedrockbuf_readLTriad($this->get(3)) ?? throw new BinaryDataException("Failed to read triad");
+		return bedrockbuf_readTriad($this->get(3)) ?? throw new BinaryDataException("Failed to read triad");
 	}
 
 	public function putTriad(int $v) : void{
-		$this->buffer .= bedrockbuf_writeLTriad($v);
+		$this->buffer .= bedrockbuf_writeTriad($v);
 	}
 
 	/**

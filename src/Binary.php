@@ -27,9 +27,6 @@ declare(strict_types=1);
 namespace pocketmine\utils;
 
 use InvalidArgumentException;
-use function bedrockbuf_readLLong;
-use function bedrockbuf_readUnsignedShort;
-use function bedrockbuf_writeLFloat;
 use function chr;
 use function ord;
 use function pack;
