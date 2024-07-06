@@ -388,10 +388,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarInt(string $buffer, int &$offset) : int{
-		// TODO: this is a temporary workaround until bedrockbuf_readVarInt($buffer, $offset, true) is fixed
-		$raw = self::readUnsignedVarInt($buffer, $offset);
-		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 63));
+		return bedrockbuf_writeVarInt($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
 	}
 
 	/**
@@ -409,9 +406,7 @@ class Binary{
 	 * Writes a 32-bit integer as a zigzag-encoded variable-length integer.
 	 */
 	public static function writeVarInt(int $v) : string{
-		// TODO: this is a temporary workaround until bedrockbuf_writeVarInt($v, true) is fixed
-		$v = ($v << 32 >> 32);
-		return self::writeUnsignedVarInt(($v << 1) ^ ($v >> 31));
+		return bedrockbuf_writeVarInt($v, true);
 	}
 
 	/**
@@ -431,10 +426,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarLong(string $buffer, int &$offset) : int{
-		// TODO: this is a temporary workaround until bedrockbuf_readVarLong($buffer, $offset, true) is fixed
-		$raw = self::readUnsignedVarLong($buffer, $offset);
-		$temp = ((($raw << 63) >> 63) ^ $raw) >> 1;
-		return $temp ^ ($raw & (1 << 63));
+		return bedrockbuf_readVarLong($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarLong");
 	}
 
 	/**
@@ -452,8 +444,7 @@ class Binary{
 	 * Writes a 64-bit integer as a zigzag-encoded variable-length long.
 	 */
 	public static function writeVarLong(int $v) : string{
-		// TODO: this is a temporary workaround until bedrockbuf_writeVarLong($v, true) is fixed
-		return self::writeUnsignedVarLong(($v << 1) ^ ($v >> 63));
+		return bedrockbuf_writeVarLong($v, true);
 	}
 
 	/**
