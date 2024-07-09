@@ -388,7 +388,7 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarInt(string $buffer, int &$offset) : int{
-		return bedrockbuf_writeVarInt($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
+		return bedrockbuf_readVarInt($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
 	}
 
 	/**
