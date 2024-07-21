@@ -148,7 +148,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getLShort() : int{
-		return bedrockbuf_readLShort($this->get(2)) ?? throw new BinaryDataException("Failed to read LShort");
+		return bedrockbuf_readLUnsignedShort($this->get(2)) ?? throw new BinaryDataException("Failed to read LShort");
 	}
 
 	/**
