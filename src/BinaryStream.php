@@ -306,7 +306,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getUnsignedVarInt() : int{
-		return bedrockbuf_readVarInt($this->buffer, $this->offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarInt");
+		return Binary::readUnsignedVarInt($this->buffer, $this->offset);
 	}
 
 	/**
@@ -323,7 +323,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getVarInt() : int{
-		return bedrockbuf_readVarInt($this->buffer, $this->offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
+		return Binary::readVarInt($this->buffer, $this->offset);
 	}
 
 	/**
@@ -340,7 +340,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getUnsignedVarLong() : int{
-		return bedrockbuf_readVarLong($this->buffer, $this->offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarLong");
+		return Binary::readUnsignedVarLong($this->buffer, $this->offset);
 	}
 
 	/**
@@ -357,7 +357,7 @@ class BinaryStream{
 	 * @throws BinaryDataException
 	 */
 	public function getVarLong() : int{
-		return bedrockbuf_readVarLong($this->buffer, $this->offset, true) ?? throw new BinaryDataException("Failed to read VarLong");
+		return Binary::readVarLong($this->buffer, $this->offset);
 	}
 
 	/**

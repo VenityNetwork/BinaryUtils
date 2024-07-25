@@ -388,7 +388,10 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarInt(string $buffer, int &$offset) : int{
-		return bedrockbuf_readVarInt($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarInt");
+		$offset_z = 0;
+		$ret = bedrockbuf_readVarInt(substr($buffer, $offset, 6), $offset_z, true) ?? throw new BinaryDataException("Failed to read UnsignedVarInt");
+		$offset += $offset_z;
+		return $ret;
 	}
 
 	/**
@@ -399,7 +402,10 @@ class Binary{
 	 * @throws BinaryDataException if the var-int did not end after 5 bytes or there were not enough bytes
 	 */
 	public static function readUnsignedVarInt(string $buffer, int &$offset) : int{
-		return bedrockbuf_readVarInt($buffer, $offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarInt");
+		$offset_z = 0;
+		$ret = bedrockbuf_readVarInt(substr($buffer, $offset, 6), $offset_z, false) ?? throw new BinaryDataException("Failed to read UnsignedVarInt");
+		$offset += $offset_z;
+		return $ret;
 	}
 
 	/**
@@ -426,7 +432,10 @@ class Binary{
 	 * @throws BinaryDataException
 	 */
 	public static function readVarLong(string $buffer, int &$offset) : int{
-		return bedrockbuf_readVarLong($buffer, $offset, true) ?? throw new BinaryDataException("Failed to read VarLong");
+		$offset_z = 0;
+		$ret = bedrockbuf_readVarLong(substr($buffer, $offset, 11), $offset_z, true) ?? throw new BinaryDataException("Failed to read UnsignedVarLong");
+		$offset += $offset_z;
+		return $ret;
 	}
 
 	/**
@@ -437,7 +446,10 @@ class Binary{
 	 * @throws BinaryDataException if the var-int did not end after 10 bytes or there were not enough bytes
 	 */
 	public static function readUnsignedVarLong(string $buffer, int &$offset) : int{
-		return bedrockbuf_readVarLong($buffer, $offset, false) ?? throw new BinaryDataException("Failed to read UnsignedVarLong");
+		$offset_z = 0;
+		$ret = bedrockbuf_readVarLong(substr($buffer, $offset, 11), $offset_z, false) ?? throw new BinaryDataException("Failed to read UnsignedVarLong");
+		$offset += $offset_z;
+		return $ret;
 	}
 
 	/**
